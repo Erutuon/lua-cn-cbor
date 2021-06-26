@@ -1,0 +1,3 @@
+[submodule "cn-cbor"]
+	path = cn-cbor
+	url = https://github.com/jimsch/cn-cbor
