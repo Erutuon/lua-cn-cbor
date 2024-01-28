@@ -13,7 +13,16 @@ endif
 CBOR_SRC_FILES = cn-cbor.c cn-error.c cn-get.c
 CBOR_SRC = $(foreach file,$(CBOR_SRC_FILES),$(CBOR_SRC_DIR)/$(file))
 
-LIBS = -llua -lm -ldl
+LUA_VERSION ?= 5.3
+
+LUA_LIB ?= lua$(LUA_VERSION)
+LUA_LIBS = -l$(LUA_LIB)
+LIBS = $(LUA_LIBS) -lm -ldl
+
+LUA_LIB_DIR ?= /usr/lib
+
+LUA_INC_DIR ?= /usr/include/lua5.3
+LUA_INCLUDES = -I$(LUA_INC_DIR)
 
 lib: lua-cn-cbor.c $(CBOR_SRC)
-	gcc $(CFLAGS) -I$(CBOR_INC_DIR) $(LIBS) $(CBOR_SRC) lua-cn-cbor.c -o cn-cbor.so
+	gcc $(CFLAGS) -I$(CBOR_INC_DIR) -L$(LUA_LIB_DIR) $(LUA_INCLUDES) -Ilua-compat-5.3 $(LIBS) $(CBOR_SRC) lua-cn-cbor.c -o cncbor.so

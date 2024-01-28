@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+#include "compat-5.3.h"
 #include "cn-cbor/cn-cbor.h"
 
 #define EPRINTF(...) fprintf(stderr, __VA_ARGS__)
@@ -28,6 +26,10 @@ static const char * const type_names[] = {
 	"FLOAT",
 	"INVALID"
 };
+
+#ifndef LUA_MAXINTEGER
+#define LUA_MAXINTEGER __LONG_LONG_MAX__
+#endif
 
 static int lua_push_cn_cbor (lua_State * L, cn_cbor * val) {
 	switch (val->type) {
@@ -154,7 +156,7 @@ static const luaL_Reg funcs[] = {
 	{ NULL, NULL }
 };
 
-int luaopen_cbor(lua_State * L) {
+int luaopen_cncbor(lua_State * L) {
 	luaL_newlib(L, funcs);
 	
 	lua_createtable(L, ARRAY_SIZE(type_names), 0);
